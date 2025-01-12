@@ -1,12 +1,12 @@
 import React from 'react';
 import { Text } from "@fluentui/react-components";
 
-const MonthlyView = () => {
+const AllExpenses = () => {
     return (
         <div style={{ padding: '20px' }}>
-            <Text>Monthly View</Text>
+            <Text>All Expenses</Text>
         </div>
     );
 };
 
-export default MonthlyView;
+export default AllExpenses;

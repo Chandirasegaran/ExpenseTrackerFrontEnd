@@ -3,205 +3,148 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/authContext';
 import { doSignOut } from '../../firebase/auth';
 import {
-    CommandBarButton,
-    DefaultButton,
-    PrimaryButton,
-    Stack,
+    Button,
     Text,
-    IconButton,
-} from '@fluentui/react';
+    Tab,
+    TabList,
+    tokens,
+    makeStyles,
+    Menu,
+    MenuTrigger,
+    MenuPopover,
+    MenuList,
+    MenuItem,
+} from "@fluentui/react-components";
+import { List24Regular } from "@fluentui/react-icons";
 
+// Define styles using makeStyles
+const useStyles = makeStyles({
+    navbar: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        padding: '10px 20px',
+        backgroundColor: tokens.colorNeutralBackground2,
+        boxShadow: tokens.shadow4,
+        position: 'relative',
+    },
+    title: {
+        fontWeight: tokens.fontWeightBold,
+        fontSize: tokens.fontSizeBase600,
+    },
+    navButtons: {
+        display: 'flex',
+        gap: '10px',
+        '@media (max-width: 768px)': {
+            display: 'none',
+        },
+    },
+    mobileMenuButton: {
+        '@media (min-width: 768px)': {
+            display: 'none',
+        },
+    },
+    mobileMenu: {
+        position: 'absolute',
+        top: '100%',
+        left: 0,
+        width: '100%',
+        backgroundColor: tokens.colorNeutralBackground1,
+        boxShadow: tokens.shadow8,
+        padding: '10px',
+    },
+    menuContent: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '8px',
+    },
+});
 
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate();
-    const { userLoggedIn } = useAuth();
+    const { userLoggedIn, currentUser } = useAuth();
+    const styles = useStyles();
 
-    const toggleMenu = () => {
-        setIsMenuOpen(!isMenuOpen);
+    const handleSignOut = async () => {
+        await doSignOut();
+        navigate('/login');
     };
 
+    const navigationTabs = [
+        { name: 'Daily View', href: '#daily' },
+        { name: 'Weekly View', href: '#weekly' },
+        { name: 'Monthly View', href: '#monthly' },
+    ];
+
     return (
-        <Stack
-            horizontal
-            horizontalAlign="space-between"
-            verticalAlign="center"
-            styles={{
-                root: {
-                    padding: '10px 20px',
-                    boxShadow: '0 2px 5px rgba(0, 0, 0, 0.1)',
-                    backgroundColor: '#f3f3f3',
-                    position: 'relative',
-                },
-            }}
-        >
-            <Text variant="xLarge" styles={{ root: { fontWeight: 'bold' } }}>
-                Expenses Tracker
-            </Text>
-{/* 
-            <Stack
-                horizontal
-                tokens={{ childrenGap: 10 }}
-                styles={{
-                    root: {
-                        display: isMenuOpen ? 'none' : 'flex',
-                    },
-                }}
-            >
-                <CommandBarButton text="Daily View" href="#daily" />
-                <CommandBarButton text="Weekly View" href="#weekly" />
-                <CommandBarButton text="Monthly View" href="#monthly" />
-            </Stack> */}
+        <div className={styles.navbar}>
+            <Text className={styles.title}>Expenses Tracker</Text>
 
-
-            {/* Mobile Menu Button */}
-            <IconButton
-                iconProps={{ iconName: 'GlobalNavButton' }}
-                title="Menu"
-                ariaLabel="Menu"
-                onClick={toggleMenu}
-                styles={{
-                    root: {
-                        display: isMenuOpen ? 'none' : 'block',
-                        '@media (min-width: 768px)': {
-                            display: 'none',
-                        },
-                    },
-                }}
-            />
+            {/* Desktop Navigation */}
+            <TabList className={styles.navButtons}>
+                {navigationTabs.map((tab) => (
+                    <Tab key={tab.name} value={tab.href}>
+                        {tab.name}
+                    </Tab>
+                ))}
+            </TabList>
 
             {/* Mobile Menu */}
-            {isMenuOpen && (
-                <Stack
-                    tokens={{ childrenGap: 10 }}
-                    styles={{
-                        root: {
-                            position: 'absolute',
-                            top: '100%',
-                            left: 0,
-                            width: '100%',
-                            backgroundColor: '#fff',
-                            boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-                            padding: 10,
-                        },
-                    }}
-                >
-                    <CommandBarButton text="Daily View" href="#daily" />
-                    <CommandBarButton text="Weekly View" href="#weekly" />
-                   
-                   <CommandBarButton text="Monthly View" href="#monthly" />
-                    {userLoggedIn ? (
-                        <DefaultButton
-                            text="Logout"
-                            onClick={() =>
-                                doSignOut().then(() => {
-                                    navigate('/login');
-                                })
-                            }
-                        />
-                    ) : (
-                        <>
-                            <PrimaryButton
-                                text="Login"
-                                onClick={() => navigate('/login')}
-                            />
-                            <DefaultButton
-                                text="Register New Account"
-                                onClick={() => navigate('/register')}
-                            />
-                        </>
-                    )}
-                </Stack>
-            )}
-
-            {/* User Action Buttons */}
-            <Stack
-                horizontal
-                tokens={{ childrenGap: 10 }}
-                styles={{
-                    root: {
-                        '@media (max-width: 768px)': {
-                            display: 'none',
-                        },
-                    },
-                }}
-            >
-                {userLoggedIn ? (
-                    <DefaultButton
-                        text="Logout"
-                        onClick={() =>
-                            doSignOut().then(() => {
-                                navigate('/login');
-                            })
-                        }
+            <Menu open={isMenuOpen} onOpenChange={(e, data) => setIsMenuOpen(data.open)}>
+                
+                <MenuTrigger disableButtonEnhancement>
+                    <Button
+                        icon={<List24Regular />}
+                        className={styles.mobileMenuButton}
+                        appearance="transparent"
                     />
+                </MenuTrigger>
+                <MenuPopover>
+                    <MenuList className={styles.menuContent}>
+                        {navigationTabs.map((tab) => (
+                            <MenuItem key={tab.name} onClick={() => window.location.href = tab.href}>
+                                {tab.name}
+                            </MenuItem>
+                        ))}
+                        {userLoggedIn ? (
+                            <MenuItem onClick={handleSignOut}>Logout</MenuItem>
+                        ) : (
+                            <>
+                                <MenuItem onClick={() => navigate('/login')}>Login</MenuItem>
+                                <MenuItem onClick={() => navigate('/register')}>
+                                    Register New Account
+                                </MenuItem>
+                            </>
+                        )}
+                    </MenuList>
+                </MenuPopover>
+            </Menu>
+
+            {/* Desktop Authentication Buttons */}
+            <div className={styles.navButtons}>
+                {userLoggedIn ? (
+                    < ><Text>{currentUser.displayName ? currentUser.displayName : currentUser.email}
+                    </Text>
+                        <Button appearance="secondary" onClick={handleSignOut}>
+                            Logout
+                        </Button></>
                 ) : (
                     <>
-                        <PrimaryButton
-                            text="Login"
-                            onClick={() => navigate('/login')}
-                        />
-                        <DefaultButton
-                            text="Register New Account"
-                            onClick={() => navigate('/register')}
-                        />
+                        <Button appearance="primary" onClick={() => navigate('/login')}>
+                            Login
+                        </Button>
+                        <Button appearance="secondary" onClick={() => navigate('/register')}>
+                            Register New Account
+                        </Button>
                     </>
                 )}
-            </Stack>
-        </Stack>
+            </div>
+        </div>
     );
 };
 
 export default Navbar;
 
 
-// // Navbar.jsx
-// import React, { useState } from 'react';
-// import { Link, useNavigate } from 'react-router-dom'
-// import { useAuth } from '../../contexts/authContext'
-// import { doSignOut } from '../../firebase/auth'
-// import './Navbar.css';
 
-// const Navbar = () => {
-//   const [isMenuOpen, setIsMenuOpen] = useState(false);
-//     const navigate = useNavigate()
-//     const { userLoggedIn } = useAuth()
-//   const toggleMenu = () => {
-//     setIsMenuOpen(!isMenuOpen);
-//   };
-
-//   return (
-//     <div className="bodyc">
-//       <nav className="navbar">
-//         <div className="navbar-header">Expenses Tracker</div>
-//         <button className="hamburger" onClick={toggleMenu}>
-//           <span className="hamburger-line"></span>
-//           <span className="hamburger-line"></span>
-//           <span className="hamburger-line"></span>
-//         </button>
-        
-//         <div className={`navbar-container ${isMenuOpen ? 'open' : ''}`}>
-//           <a href="#daily" className="nav-link">Daily View</a>
-//           <a href="#weekly" className="nav-link">Weekly View</a>
-//           <a href="#monthly" className="nav-link">Monthly View</a>
-//         </div>
-//         <div className={`navbar-container ${isMenuOpen ? 'open' : ''}`}>
-//           {
-//             userLoggedIn
-//               ?
-//               <>
-//                 <button onClick={() => { doSignOut().then(() => { navigate('/login') }) }} className='text-sm text-blue-600 underline'>Logout</button>
-//               </>
-//               :
-//               <>
-//                 <Link className='text-sm text-blue-600 underline' to={'/login'}>Login</Link>
-//                 <Link className='text-sm text-blue-600 underline' to={'/register'}>Register New Account</Link>
-//               </>
-//           }
-//           </div>
-//       </nav>
-//     </div>
-//   );
-// };
-
-// export default Navbar;

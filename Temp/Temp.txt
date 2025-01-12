@@ -359,3 +359,233 @@
 // };
 
 // export default Login;
+
+
+
+
+
+
+
+
+
+
+
+
+
+?Original Navbar
+
+
+// // Navbar.jsx
+// import React, { useState } from 'react';
+// import { Link, useNavigate } from 'react-router-dom'
+// import { useAuth } from '../../contexts/authContext'
+// import { doSignOut } from '../../firebase/auth'
+// import './Navbar.css';
+
+// const Navbar = () => {
+//   const [isMenuOpen, setIsMenuOpen] = useState(false);
+//     const navigate = useNavigate()
+//     const { userLoggedIn } = useAuth()
+//   const toggleMenu = () => {
+//     setIsMenuOpen(!isMenuOpen);
+//   };
+
+//   return (
+//     <div className="bodyc">
+//       <nav className="navbar">
+//         <div className="navbar-header">Expenses Tracker</div>
+//         <button className="hamburger" onClick={toggleMenu}>
+//           <span className="hamburger-line"></span>
+//           <span className="hamburger-line"></span>
+//           <span className="hamburger-line"></span>
+//         </button>
+        
+//         <div className={`navbar-container ${isMenuOpen ? 'open' : ''}`}>
+//           <a href="#daily" className="nav-link">Daily View</a>
+//           <a href="#weekly" className="nav-link">Weekly View</a>
+//           <a href="#monthly" className="nav-link">Monthly View</a>
+//         </div>
+//         <div className={`navbar-container ${isMenuOpen ? 'open' : ''}`}>
+//           {
+//             userLoggedIn
+//               ?
+//               <>
+//                 <button onClick={() => { doSignOut().then(() => { navigate('/login') }) }} className='text-sm text-blue-600 underline'>Logout</button>
+//               </>
+//               :
+//               <>
+//                 <Link className='text-sm text-blue-600 underline' to={'/login'}>Login</Link>
+//                 <Link className='text-sm text-blue-600 underline' to={'/register'}>Register New Account</Link>
+//               </>
+//           }
+//           </div>
+//       </nav>
+//     </div>
+//   );
+// };
+
+// export default Navbar;
+
+
+
+
+
+// import React, { useState } from 'react';
+// import { Link, useNavigate } from 'react-router-dom';
+// import { useAuth } from '../../contexts/authContext';
+// import { doSignOut } from '../../firebase/auth';
+// import {
+//     Button,
+//     Title3,
+//     TabList,
+//     Tab,
+//     Menu,
+//     MenuTrigger,
+//     MenuPopover,
+//     MenuList,
+//     MenuItem,
+//     tokens,
+//     makeStyles,
+//     mergeClasses,
+// } from "@fluentui/react-components";
+// import { List24Regular } from "@fluentui/react-icons";
+
+// const useStyles = makeStyles({
+//     navContainer: {
+//         display: 'flex',
+//         justifyContent: 'space-between',
+//         alignItems: 'center',
+//         padding: '8px 20px',
+//         backgroundColor: '#f3f3f3',
+//         borderBottom: `1px solid ${tokens.colorNeutralStroke1}`,
+//         width: '100%',
+//         boxSizing: 'border-box',
+//     },
+//     brand: {
+//         fontWeight: tokens.fontWeightSemibold,
+//         color: tokens.colorNeutralForeground1,
+//         padding: '4px 0',
+//         margin: 0,
+//     },
+//     navigation: {
+//         display: 'flex',
+//         alignItems: 'center',
+//         gap: '16px',
+//         '@media (max-width: 768px)': {
+//             display: 'none',
+//         },
+//     },
+//     tabs: {
+//         minWidth: '300px',
+//     },
+//     authButtons: {
+//         display: 'flex',
+//         gap: '8px',
+//         '@media (max-width: 768px)': {
+//             display: 'none',
+//         },
+//     },
+//     mobileMenuButton: {
+//         display: 'none',
+//         '@media (max-width: 768px)': {
+//             display: 'block',
+//         },
+//     },
+//     mobileMenu: {
+//         padding: '8px 0',
+//         minWidth: '200px',
+//     },
+// });
+
+// const Navbar = () => {
+//     const styles = useStyles();
+//     const [selectedTab, setSelectedTab] = useState('daily');
+//     const navigate = useNavigate();
+//     const { userLoggedIn } = useAuth();
+
+//     const handleTabSelect = (event, data) => {
+//         setSelectedTab(data.value);
+//     };
+
+//     const handleSignOut = async () => {
+//         await doSignOut();
+//         navigate('/login');
+//     };
+
+//     return (
+//         <div className={styles.navContainer}>
+//             <Title3 className={styles.brand}>
+//                 Expenses Tracker
+//             </Title3>
+
+//             <div className={styles.navigation}>
+//                 <TabList
+//                     selectedValue={selectedTab}
+//                     onTabSelect={handleTabSelect}
+//                     className={styles.tabs}
+//                 >
+//                     <Tab value="daily">Daily View</Tab>
+//                     <Tab value="weekly">Weekly View</Tab>
+//                     <Tab value="monthly">Monthly View</Tab>
+//                 </TabList>
+//             </div>
+
+//             {/* Mobile Menu */}
+//             <Menu>
+//                 <MenuTrigger disableButtonEnhancement>
+//                     <Button
+//                         icon={<List24Regular />}
+//                         appearance="subtle"
+//                         className={styles.mobileMenuButton}
+//                     />
+//                 </MenuTrigger>
+//                 <MenuPopover>
+//                     <MenuList className={styles.mobileMenu}>
+//                         <MenuItem onClick={() => setSelectedTab('daily')}>Daily View</MenuItem>
+//                         <MenuItem onClick={() => setSelectedTab('weekly')}>Weekly View</MenuItem>
+//                         <MenuItem onClick={() => setSelectedTab('monthly')}>Monthly View</MenuItem>
+//                         <MenuItem>
+//                             {userLoggedIn ? (
+//                                 <Button
+//                                     appearance="subtle"
+//                                     onClick={handleSignOut}
+//                                     style={{ width: '100%', justifyContent: 'flex-start' }}
+//                                 >
+//                                     Logout
+//                                 </Button>
+//                             ) : (
+//                                 <Button
+//                                     appearance="subtle"
+//                                     onClick={() => navigate('/login')}
+//                                     style={{ width: '100%', justifyContent: 'flex-start' }}
+//                                 >
+//                                     Login
+//                                 </Button>
+//                             )}
+//                         </MenuItem>
+//                     </MenuList>
+//                 </MenuPopover>
+//             </Menu>
+
+//             {/* Desktop Auth Buttons */}
+//             <div className={styles.authButtons}>
+//                 {userLoggedIn ? (
+//                     <Button appearance="secondary" onClick={handleSignOut}>
+//                         Logout
+//                     </Button>
+//                 ) : (
+//                     <>
+//                         <Button appearance="primary" onClick={() => navigate('/login')}>
+//                             Login
+//                         </Button>
+//                         <Button appearance="secondary" onClick={() => navigate('/register')}>
+//                             Register New Account
+//                         </Button>
+//                     </>
+//                 )}
+//             </div>
+//         </div>
+//     );
+// };
+
+// export default Navbar;
