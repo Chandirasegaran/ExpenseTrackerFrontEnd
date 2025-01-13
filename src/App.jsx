@@ -6,9 +6,10 @@ import Register from './components/auth/register';
 import Home from './components/home';
 import Navbar from './components/navBar/Navbar';
 import { initializeIcons } from '@fluentui/react';
-import SplashScreen from './components/splashscreen';
+import SplashScreen from './components/SplashScreen';
 import { FluentProvider, webLightTheme } from '@fluentui/react-components';
 import { AuthProvider } from './contexts/authContext';
+
 
 initializeIcons();
 
