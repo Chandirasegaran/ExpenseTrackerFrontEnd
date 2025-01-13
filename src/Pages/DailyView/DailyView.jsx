@@ -20,38 +20,60 @@ import { Add24Regular, Delete24Regular , AppsListRegular} from "@fluentui/react-
 
 const useStyles = makeStyles({
   container: {
-    marginTop: '20px',
+      marginTop: '20px',
   },
   dateContainer: {
-    display: 'flex',
-    gap: '12px',
-    marginBottom: '20px',
-    alignItems: 'flex-end',
+      display: 'flex',
+      gap: '12px',
+      marginBottom: '20px',
+      alignItems: 'flex-end',
+      '@media (max-width: 768px)': {
+          flexDirection: 'column',
+          gap: '8px',
+          alignItems: 'stretch',
+      },
   },
   expenseForm: {
-    display: 'flex',
-    gap: '12px',
-    marginTop: '20px',
-    alignItems: 'flex-end',
+      display: 'flex',
+      gap: '12px',
+      marginTop: '20px',
+      alignItems: 'flex-end',
+      '@media (max-width: 768px)': {
+          flexDirection: 'column',
+          gap: '8px',
+          '& > *': {
+              width: '100%',
+          },
+      },
   },
   expenses: {
-    marginTop: '20px',
-    width: '100%',
-    overflowX: 'auto',
+      marginTop: '20px',
+      width: '100%',
+      overflowX: 'auto',
   },
   table: {
-    width: '100%',
+      width: '100%',
+      '@media (max-width: 768px)': {
+          '& th, & td': {
+              padding: '8px 4px',
+              fontSize: '0.9rem',
+          },
+      },
   },
   deleteButton: {
-    minWidth: 'auto',
+      minWidth: 'auto',
   },
   total: {
-    marginTop: '20px',
-    textAlign: 'right',
-    fontSize: '18px',
-    fontWeight: 'bold',
+      marginTop: '20px',
+      textAlign: 'right',
+      fontSize: '18px',
+      fontWeight: 'bold',
+      '@media (max-width: 768px)': {
+          fontSize: '16px',
+      },
   },
 });
+
 
 const DailyView = () => {
   const styles = useStyles();

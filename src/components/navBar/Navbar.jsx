@@ -27,10 +27,16 @@ const useStyles = makeStyles({
         backgroundColor: tokens.colorNeutralBackground2,
         boxShadow: tokens.shadow4,
         position: 'relative',
+        '@media (max-width: 768px)': {
+            padding: '10px',
+        },
     },
     title: {
         fontWeight: tokens.fontWeightBold,
         fontSize: tokens.fontSizeBase600,
+        '@media (max-width: 768px)': {
+            fontSize: tokens.fontSizeBase500,
+        },
     },
     navButtons: {
         display: 'flex',
@@ -40,7 +46,7 @@ const useStyles = makeStyles({
         },
     },
     mobileMenuButton: {
-        '@media (min-width: 768px)': {
+        '@media (min-width: 769px)': {
             display: 'none',
         },
     },
@@ -52,14 +58,9 @@ const useStyles = makeStyles({
         backgroundColor: tokens.colorNeutralBackground1,
         boxShadow: tokens.shadow8,
         padding: '10px',
-    },
-    menuContent: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '8px',
+        zIndex: 1000,
     },
 });
-
 const Navbar = () => {
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const navigate = useNavigate();

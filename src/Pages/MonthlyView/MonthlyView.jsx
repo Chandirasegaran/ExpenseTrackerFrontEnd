@@ -27,29 +27,34 @@ const useStyles = makeStyles({
         gap: '12px',
         marginBottom: '20px',
         alignItems: 'flex-end',
-    },
-    expenseForm: {
-        display: 'flex',
-        gap: '12px',
-        marginTop: '20px',
-        alignItems: 'flex-end',
+        '@media (max-width: 768px)': {
+            flexDirection: 'column',
+            gap: '8px',
+            '& > *': {
+                width: '100%',
+            },
+        },
     },
     expenses: {
         marginTop: '20px',
         width: '100%',
         overflowX: 'auto',
+        '@media (max-width: 768px)': {
+            '& table': {
+                fontSize: '0.9rem',
+            },
+            '& th, & td': {
+                padding: '8px 4px',
+            },
+        },
     },
     table: {
         width: '100%',
-    },
-    deleteButton: {
-        minWidth: 'auto',
-    },
-    total: {
-        marginTop: '20px',
-        textAlign: 'right',
-        fontSize: '18px',
-        fontWeight: 'bold',
+        '@media (max-width: 480px)': {
+            '& th:nth-child(2), & td:nth-child(2)': { // Hide date column on very small screens
+                display: 'none',
+            },
+        },
     },
 });
 

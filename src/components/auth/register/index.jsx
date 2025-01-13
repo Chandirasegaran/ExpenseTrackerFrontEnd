@@ -26,6 +26,9 @@ const useStyles = makeStyles({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
+        '@media (max-width: 768px)' :{
+            marginTop: '-18%',
+        }
     },
     formContainer: {
         width: '90%',

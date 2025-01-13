@@ -9,16 +9,40 @@ import AllExpenses from '../../Pages/AllExpenses/AllExpenses';
 const useStyles = makeStyles({
     container: {
         padding: '20px',
+        '@media (max-width: 768px)': {
+            padding: '10px',
+        },
     },
     header: {
         marginBottom: '20px',
+        '@media (max-width: 768px)': {
+            marginBottom: '15px',
+        },
     },
     welcome: {
         marginBottom: '16px',
+        '@media (max-width: 768px)': {
+            fontSize: '1.2rem',
+            marginBottom: '12px',
+        },
     },
     date: {
         color: 'rgb(96, 94, 92)',
-    }
+        '@media (max-width: 768px)': {
+            fontSize: '0.9rem',
+        },
+    },
+    tabList: {
+        '@media (max-width: 768px)': {
+            display: 'flex',
+            width: '100%',
+            overflowX: 'auto',
+            '& button': {
+                flex: '1 0 auto',
+                whiteSpace: 'nowrap',
+            },
+        },
+    },
 });
 
 const Home = () => {
