@@ -13,6 +13,7 @@ import {
     MessageBarBody,
     tokens,
 } from '@fluentui/react-components';
+import { PersonRegular, MailRegular, PasswordRegular } from "@fluentui/react-icons";
 
 const useStyles = makeStyles({
     container: {
@@ -143,6 +144,7 @@ const Login = () => {
                 <form onSubmit={onSubmit} className={styles.form}>
                     <Field label="Email" required>
                         <Input
+                        contentBefore={<MailRegular />}
                             type="email"
                             autoComplete="email"
                             value={email}
@@ -153,6 +155,7 @@ const Login = () => {
 
                     <Field label="Password" required>
                         <Input
+                            contentBefore={<PasswordRegular />}
                             type="password"
                             autoComplete="current-password"
                             value={password}

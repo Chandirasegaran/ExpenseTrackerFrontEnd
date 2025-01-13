@@ -16,6 +16,9 @@ import {
     tokens,
 } from '@fluentui/react-components';
 
+import { PersonRegular, Mail20Regular, Password20Regular } from "@fluentui/react-icons";
+
+
 const useStyles = makeStyles({
     container: {
         width: '100%',
@@ -157,6 +160,7 @@ const Register = () => {
                             onChange={(e) => setName(e.target.value)}
                             disabled={isRegistering}
                             placeholder="Enter your full name"
+                            contentBefore={<PersonRegular />}
                         />
                     </Field>
 
@@ -168,6 +172,7 @@ const Register = () => {
                             onChange={(e) => setEmail(e.target.value)}
                             disabled={isRegistering}
                             placeholder="Enter your email"
+                            contentBefore={<Mail20Regular />}
                         />
                     </Field>
 
@@ -179,6 +184,7 @@ const Register = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             disabled={isRegistering}
                             placeholder="Create a password"
+                            contentBefore={<Password20Regular />}
                         />
                     </Field>
 
@@ -190,6 +196,7 @@ const Register = () => {
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             disabled={isRegistering}
                             placeholder="Confirm your password"
+                            contentBefore={<Password20Regular />}
                         />
                     </Field>
 

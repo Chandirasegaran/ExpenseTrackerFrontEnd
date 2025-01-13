@@ -14,7 +14,9 @@ import {
   TableCell,
   Spinner
 } from "@fluentui/react-components";
-import { Add24Regular } from "@fluentui/react-icons";
+
+import { Add24Regular, Delete24Regular , AppsListRegular} from "@fluentui/react-icons";
+
 
 const useStyles = makeStyles({
   container: {
@@ -55,7 +57,7 @@ const DailyView = () => {
   const styles = useStyles();
   const { currentUser } = useAuth();
   // const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
-  const [selectedDate, setSelectedDate] = useState(new Date().toLocaleDateString('en-CA')); 
+  const [selectedDate, setSelectedDate] = useState(new Date().toLocaleDateString('en-CA'));
   const [expenses, setExpenses] = useState([]);
   const [newExpense, setNewExpense] = useState({ itemName: '', amount: '' });
   const [isLoading, setIsLoading] = useState(false);
@@ -151,7 +153,7 @@ const DailyView = () => {
           />
         </Field>
         <Button onClick={fetchExpenses} disabled={isLoading}>
-          {isLoading ?( <><Spinner size="tiny" />' Loading...'</>) : 'Go'}
+          {isLoading ? (<><Spinner size="tiny" />' Loading...'</>) : 'Go'}
         </Button>
       </div>
 
@@ -159,6 +161,7 @@ const DailyView = () => {
         <Table className={styles.table}>
           <TableHeader>
             <TableRow>
+              <TableHeaderCell>Sl.No.</TableHeaderCell>
               <TableHeaderCell>Item</TableHeaderCell>
               <TableHeaderCell>Amount</TableHeaderCell>
               <TableHeaderCell>Actions</TableHeaderCell>
@@ -167,6 +170,7 @@ const DailyView = () => {
           <TableBody>
             {expenses.map((expense) => (
               <TableRow key={expense.id}>
+                <TableCell>{expenses.indexOf(expense) + 1}</TableCell>
                 <TableCell>{expense.itemName}</TableCell>
                 <TableCell>₹{expense.amount.toFixed(2)}</TableCell>
                 <TableCell>
@@ -175,6 +179,8 @@ const DailyView = () => {
                     onClick={() => deleteExpense(expense.id)}
                     disabled={isLoading}
                     className={styles.deleteButton}
+                    icon={<Delete24Regular />}
+
                   >
                     Delete
                   </Button>
@@ -202,19 +208,22 @@ const DailyView = () => {
       <div className={styles.expenseForm}>
         <Field label="Item Name">
           <Input
+          contentBefore={<AppsListRegular> </AppsListRegular>}
             value={newExpense.itemName}
             onChange={(e) => setNewExpense({ ...newExpense, itemName: e.target.value })}
             placeholder="Enter item name"
             disabled={isLoading}
-          />
+            />
         </Field>
         <Field label="Amount">
           <Input
+            contentBefore={<Text>₹</Text>}
             type="number"
             value={newExpense.amount}
             onChange={(e) => setNewExpense({ ...newExpense, amount: e.target.value })}
             placeholder="Enter amount"
             disabled={isLoading}
+            
           />
         </Field>
         <Button

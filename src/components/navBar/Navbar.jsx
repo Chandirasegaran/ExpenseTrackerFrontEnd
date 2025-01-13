@@ -71,24 +71,24 @@ const Navbar = () => {
         navigate('/login');
     };
 
-    const navigationTabs = [
-        { name: 'Daily View', href: '#daily' },
-        { name: 'Weekly View', href: '#weekly' },
-        { name: 'Monthly View', href: '#monthly' },
-    ];
+    // const navigationTabs = [
+    //     { name: 'Daily View', href: '#daily' },
+    //     { name: 'Weekly View', href: '#weekly' },
+    //     { name: 'Monthly View', href: '#monthly' },
+    // ];
 
     return (
         <div className={styles.navbar}>
             <Text className={styles.title}>Expenses Tracker</Text>
 
             {/* Desktop Navigation */}
-            <TabList className={styles.navButtons}>
+            {/* <TabList className={styles.navButtons}>
                 {navigationTabs.map((tab) => (
                     <Tab key={tab.name} value={tab.href}>
                         {tab.name}
                     </Tab>
                 ))}
-            </TabList>
+            </TabList> */}
 
             {/* Mobile Menu */}
             <Menu open={isMenuOpen} onOpenChange={(e, data) => setIsMenuOpen(data.open)}>
@@ -102,11 +102,11 @@ const Navbar = () => {
                 </MenuTrigger>
                 <MenuPopover>
                     <MenuList className={styles.menuContent}>
-                        {navigationTabs.map((tab) => (
+                        {/* {navigationTabs.map((tab) => (
                             <MenuItem key={tab.name} onClick={() => window.location.href = tab.href}>
                                 {tab.name}
                             </MenuItem>
-                        ))}
+                        ))} */}
                         {userLoggedIn ? (
                             <MenuItem onClick={handleSignOut}>Logout</MenuItem>
                         ) : (
