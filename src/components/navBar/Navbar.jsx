@@ -217,14 +217,15 @@ const Navbar = () => {
                                 <MenuItem 
                                     icon={<QuestionCircle24Regular className={styles.menuIcon} />}
                                     text="Help & Support"
-                                    onClick={() => {'mailto:chandirasegaransegar@gmail.com'}}
-                                />
+                                    onClick={() => window.location.href = 'mailto:chandirasegaransegar@gmail.com'}  // Open email client
+                                    />
                                 <Divider className={styles.divider} />
                                 <MenuItem 
                                     icon={<SignOut24Regular className={styles.menuIcon} />}
                                     text="Sign Out"
                                     onClick={handleSignOut}
                                 />
+                                
                             </div>
                         </>
                     ) : (
@@ -243,8 +244,17 @@ const Navbar = () => {
                             >
                                 Sign Up
                             </Button>
+
                         </div>
+                        
                     )}
+                     {/* Copyright and LinkedIn link */}
+                     <div className={styles.menuSection}>
+                        <MenuItem 
+                            text="&copy; Chandirasegaran"
+                            onClick={() => window.location.href = 'https://www.linkedin.com/in/chandirasegaran'}
+                        />
+                    </div>
                 </DrawerBody>
             </OverlayDrawer>
 
@@ -277,166 +287,3 @@ const Navbar = () => {
 
 export default Navbar;
 
-// import React, { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import { useAuth } from '../../contexts/authContext';
-// import { doSignOut } from '../../firebase/auth';
-// import {
-//     Button,
-//     Text,
-//     makeStyles,
-//     OverlayDrawer,
-//     DrawerHeader,
-//     DrawerHeaderTitle,
-//     DrawerBody,
-//     Avatar,
-// } from "@fluentui/react-components";
-// import { List24Regular, Dismiss24Regular } from "@fluentui/react-icons";
-
-// const useStyles = makeStyles({
-//     navbar: {
-//         display: 'flex',
-//         justifyContent: 'space-between',
-//         alignItems: 'center',
-//         padding: '10px 20px',
-//         backgroundColor: '#f3f2f1',
-//         boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-//         position: 'relative',
-//         '@media (max-width: 768px)': {
-//             padding: '10px',
-//         },
-//     },
-//     title: {
-//         fontWeight: 'bold',
-//         fontSize: '1.5rem',
-//         '@media (max-width: 768px)': {
-//             fontSize: '1.2rem',
-//         },
-//     },
-//     navButtons: {
-//         display: 'flex',
-//         gap: '10px',
-//         '@media (max-width: 768px)': {
-//             display: 'none',
-//         },
-//     },
-//     mobileMenuButton: {
-//         '@media (min-width: 769px)': {
-//             display: 'none',
-//         },
-//     },
-//     profileInfo: {
-//         display: 'flex',
-//         flexDirection: 'column',
-//         alignItems: 'center',
-//         gap: '10px',
-//         textAlign: 'center',
-//     },
-//     avatar: {
-//         backgroundColor: '#0078D4',
-//         fontSize: '1.25rem',
-//         color: '#fff',
-//         cursor: 'pointer', // Cursor pointer for avatar click
-//     },
-//     menuItem: {
-//         padding: '10px 20px',
-//     },
-//     desktopAvatarWrapper: {
-//         display: 'flex',
-//         alignItems: 'center',
-//         gap: '10px',
-//     },
-// });
-
-// const Navbar = () => {
-//     const [isDrawerOpen, setIsDrawerOpen] = useState(false);  // State for mobile drawer
-//     const navigate = useNavigate();
-//     const { userLoggedIn, currentUser } = useAuth();
-//     const styles = useStyles();
-
-//     const handleSignOut = async () => {
-//         await doSignOut();
-//         navigate('/login');
-//     };
-
-//     // Get the first letter of the user's first name
-//     const getFirstLetter = (name) => name && name.charAt(0).toUpperCase();
-
-//     // Handle avatar click to open the drawer
-//     const handleAvatarClick = () => {
-//         setIsDrawerOpen(true);
-//     };
-
-//     return (
-//         <div className={styles.navbar}>
-//             <Text className={styles.title}>Expenses Tracker</Text>
-
-//             {/* Mobile Menu (Drawer) */}
-//             <Button
-//                 icon={<List24Regular />}
-//                 className={styles.mobileMenuButton}
-//                 appearance="transparent"
-//                 onClick={() => setIsDrawerOpen(true)}  // Open the drawer on button click
-//             />
-
-//             <OverlayDrawer
-//                 position="end" // Set position to 'end' to open from the right side
-//                 open={isDrawerOpen}
-//                 onOpenChange={(_, { open }) => setIsDrawerOpen(open)} // Handle open/close
-//             >
-//                 <DrawerHeader>
-//                     <DrawerHeaderTitle
-//                         action={
-//                             <Button
-//                                 appearance="subtle"
-//                                 aria-label="Close"
-//                                 icon={<Dismiss24Regular />}
-//                                 onClick={() => setIsDrawerOpen(false)}  // Close drawer on button click
-//                             />
-//                         }
-//                     >
-//                         User Info
-//                     </DrawerHeaderTitle>
-//                 </DrawerHeader>
-//                 <DrawerBody>
-//                     {userLoggedIn ? (
-//                         <div className={styles.profileInfo}>
-//                             {/* Profile Picture as First Letter */}
-//                             <Avatar className={styles.avatar} onClick={handleAvatarClick}>{getFirstLetter(currentUser.displayName)}</Avatar>
-//                             <Text>{currentUser.displayName}</Text>
-//                             <Text>{currentUser.email}</Text>
-//                             <Button appearance="secondary" onClick={handleSignOut}>Logout</Button>
-//                         </div>
-//                     ) : (
-//                         <div className={styles.profileInfo}>
-//                             <Button appearance="primary" onClick={() => navigate('/login')}>Login</Button>
-//                             <Button appearance="secondary" onClick={() => navigate('/register')}>Register New Account</Button>
-//                         </div>
-//                     )}
-//                 </DrawerBody>
-//             </OverlayDrawer>
-
-//             {/* Desktop Authentication Buttons */}
-//             <div className={styles.navButtons}>
-//                 {userLoggedIn ? (
-//                     <div className={styles.desktopAvatarWrapper}>
-//                         {/* Profile info for desktop */}
-//                         <Avatar className={styles.avatar} onClick={handleAvatarClick}>{getFirstLetter(currentUser.displayName)}</Avatar>
-//                         <Text>{currentUser.displayName}</Text>
-//                     </div>
-//                 ) : (
-//                     <>
-//                         <Button appearance="primary" onClick={() => navigate('/login')}>
-//                             Login
-//                         </Button>
-//                         <Button appearance="secondary" onClick={() => navigate('/register')}>
-//                             Register New Account
-//                         </Button>
-//                     </>
-//                 )}
-//             </div>
-//         </div>
-//     );
-// };
-
-// export default Navbar;
