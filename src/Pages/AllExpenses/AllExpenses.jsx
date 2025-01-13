@@ -13,8 +13,11 @@ import {
     TableBody,
     TableCell,
     makeStyles,
+    Button,
+    Spinner,
 } from "@fluentui/react-components";
 
+import { AccessTime20Filled, ArrowSyncRegular } from "@fluentui/react-icons";
 
 const parseDateFromBackend = (dateString) => {
     // Split the dd-MM-yyyy format and rearrange to yyyy-MM-dd for Date parsing
@@ -23,25 +26,27 @@ const parseDateFromBackend = (dateString) => {
 };
 
 const useStyles = makeStyles({
-  
-  total: {
-
-      textAlign: 'right',
-      fontWeight: 'bold',
-      '@media (max-width: 768px)': {
-          textAlign: 'right',
-      }
-  },
-  
+    total: {
+        textAlign: 'right',
+        fontWeight: 'bold',
+        '@media (max-width: 768px)': {
+            textAlign: 'right',
+        }
+    },
+    refreshButton: {
+        margin: '10px 0',
+    }
 });
 
 const AllExpenses = () => {
     const [expenses, setExpenses] = useState([]);
     const [groupedExpenses, setGroupedExpenses] = useState({});
+    const [loading, setLoading] = useState(false); // State to track loading status
     const { currentUser } = useAuth();
     const styles = useStyles();
 
     const fetchAllExpenses = async () => {
+        setLoading(true); // Set loading state to true when fetching starts
         try {
             const response = await fetch(
                 `https://expensetrackerbackend-uptz.onrender.com/api/expense/getExpensesByEmail/${currentUser.email}`
@@ -56,6 +61,8 @@ const AllExpenses = () => {
             groupExpensesByYearAndMonth(correctedData);
         } catch (e) {
             console.error("Error fetching expenses:", e);
+        } finally {
+            setLoading(false); // Set loading state to false once the fetch is complete
         }
     };
 
@@ -84,11 +91,26 @@ const AllExpenses = () => {
 
     useEffect(() => {
         fetchAllExpenses();
-    }, []);
+    }, []); // Fetch the expenses on component mount
 
     return (
         <div style={{ padding: "20px" }}>
             <Text variant="xLarge">All Expenses</Text>
+
+            {/* Refresh Button with Spinner */}
+            <div className={styles.refreshButton}>
+                <Button onClick={fetchAllExpenses} disabled={loading}  >
+                    {loading ? (
+                        <>
+                            <Spinner size="tiny" />  Loading...
+                        </>
+                    ) : (
+                        <>
+                            <ArrowSyncRegular />Refresh
+                        </>
+                    )}
+                </Button>
+            </div>
 
             <Accordion collapsible>
                 {/* Iterate over years */}
@@ -147,7 +169,6 @@ const AllExpenses = () => {
                     </AccordionItem>
                 ))}
             </Accordion>
-
         </div>
     );
 };

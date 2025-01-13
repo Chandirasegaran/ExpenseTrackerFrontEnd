@@ -1,52 +1,68 @@
+import React from 'react';
+import { Navigate, useRoutes } from 'react-router-dom';
+import { useAuth } from './contexts/authContext';
 import Login from "./components/auth/login";
 import Register from "./components/auth/register";
-
-// import Header from "./components/header";
-// import Login from "./UserManage/Login/login.jsx";
 import Home from "./components/home";
-
-import { AuthProvider } from "./contexts/authContext";
-import { useRoutes } from "react-router-dom";
-
 import Navbar from "./components/navBar/Navbar";
-
 import { initializeIcons } from '@fluentui/react';
 import { FluentProvider, webLightTheme } from '@fluentui/react-components';
+import { AuthProvider } from "./contexts/authContext";
 
-
-
+// Initialize Fluent UI icons
 initializeIcons();
 
+// Protected Route Component
+const ProtectedRoute = ({ children }) => {
+  const { currentUser } = useAuth();
+  
+  if (!currentUser) {
+    return <Navigate to="/login" replace />;
+  }
+  
+  return children;
+};
 
-function App() {
+// Routes Component - Separate the routes logic
+const AppRoutes = () => {
+  const { currentUser } = useAuth();
+
   const routesArray = [
     {
       path: "*",
-      element: <Login />,
+      element: <Navigate to="/home" replace />,
     },
     {
       path: "/login",
-      element: <Login />,
+      element: currentUser ? <Navigate to="/home" replace /> : <Login />,
     },
     {
       path: "/register",
-      element: <Register />,
+      element: currentUser ? <Navigate to="/home" replace /> : <Register />,
     },
     {
       path: "/home",
-      element: <Home />,
+      element: (
+        <ProtectedRoute>
+          <Home />
+        </ProtectedRoute>
+      ),
     },
   ];
-  let routesElement = useRoutes(routesArray);
+
+  return useRoutes(routesArray);
+};
+
+function App() {
   return (
-    <FluentProvider theme={webLightTheme}>
-    {/* Your app content including Navbar */}
     <AuthProvider>
-      {/* <Header /> */}
-      <Navbar />
-      <div className="w-full h-screen flex flex-col">{routesElement}</div>
+      <FluentProvider theme={webLightTheme}>
+        <div className="app">
+          <Navbar />
+          <AppRoutes />
+        </div>
+      </FluentProvider>
     </AuthProvider>
-  </FluentProvider>
   );
 }
 
