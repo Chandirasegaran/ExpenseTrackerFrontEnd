@@ -12,6 +12,7 @@ import {
     TableHeaderCell,
     TableBody,
     TableCell,
+    makeStyles,
 } from "@fluentui/react-components";
 
 
@@ -21,10 +22,24 @@ const parseDateFromBackend = (dateString) => {
     return new Date(`${year}-${month}-${day}`);
 };
 
+const useStyles = makeStyles({
+  
+  total: {
+
+      textAlign: 'right',
+      fontWeight: 'bold',
+      '@media (max-width: 768px)': {
+          textAlign: 'right',
+      }
+  },
+  
+});
+
 const AllExpenses = () => {
     const [expenses, setExpenses] = useState([]);
     const [groupedExpenses, setGroupedExpenses] = useState({});
     const { currentUser } = useAuth();
+    const styles = useStyles();
 
     const fetchAllExpenses = async () => {
         try {
@@ -82,7 +97,7 @@ const AllExpenses = () => {
                         <AccordionHeader>
                             <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
                                 <Text>{year}</Text>
-                                <Text>Total: ₹{calculateTotal(Object.values(months).flat())}</Text>
+                                <Text className={styles.total}>Total: ₹{calculateTotal(Object.values(months).flat())}</Text>
                             </div>
                         </AccordionHeader>
                         <AccordionPanel>
@@ -99,7 +114,7 @@ const AllExpenses = () => {
                                                 }}
                                             >
                                                 <Text>{month}</Text>
-                                                <Text>Total: ₹{calculateTotal(monthExpenses)}</Text>
+                                                <Text className={styles.total}>Total: ₹{calculateTotal(monthExpenses)}</Text>
                                             </div>
                                         </AccordionHeader>
                                         <AccordionPanel>

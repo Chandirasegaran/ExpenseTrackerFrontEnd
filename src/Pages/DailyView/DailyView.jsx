@@ -64,14 +64,16 @@ const useStyles = makeStyles({
       minWidth: 'auto',
   },
   total: {
-      marginTop: '20px',
+
       textAlign: 'right',
       fontSize: '18px',
       fontWeight: 'bold',
+      marginTop: '20px',
       '@media (max-width: 768px)': {
-          fontSize: '16px',
-      },
+          textAlign: 'right',
+      }
   },
+  
 });
 
 
@@ -223,7 +225,7 @@ const DailyView = () => {
       {/* Total Expense */}
       {expenses.length > 0 && (
         <div className={styles.total}>
-          <Text>Total Expense: ₹{getTotalExpense()}</Text>
+          <Text className={styles.total}>Total Expense: ₹{getTotalExpense()}</Text>
         </div>
       )}
 

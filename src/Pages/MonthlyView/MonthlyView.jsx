@@ -35,27 +35,16 @@ const useStyles = makeStyles({
             },
         },
     },
-    expenses: {
+    total: {
+        textAlign: 'right',
+        fontSize: '18px',
+        fontWeight: 'bold',
         marginTop: '20px',
-        width: '100%',
-        overflowX: 'auto',
         '@media (max-width: 768px)': {
-            '& table': {
-                fontSize: '0.9rem',
-            },
-            '& th, & td': {
-                padding: '8px 4px',
-            },
-        },
+            textAlign: 'right',
+        }
     },
-    table: {
-        width: '100%',
-        '@media (max-width: 480px)': {
-            '& th:nth-child(2), & td:nth-child(2)': { // Hide date column on very small screens
-                display: 'none',
-            },
-        },
-    },
+   
 });
 
 const MonthlyView = () => {
