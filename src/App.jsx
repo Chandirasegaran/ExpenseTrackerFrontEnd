@@ -1,18 +1,17 @@
 import React from 'react';
 import { Navigate, useRoutes } from 'react-router-dom';
 import { useAuth } from './contexts/authContext';
-import Login from "./components/auth/login";
-import Register from "./components/auth/register";
-import Home from "./components/home";
-import Navbar from "./components/navBar/Navbar";
+import Login from './components/auth/login';
+import Register from './components/auth/register';
+import Home from './components/home';
+import Navbar from './components/navBar/Navbar';
 import { initializeIcons } from '@fluentui/react';
+import SplashScreen from './components/splashscreen';
 import { FluentProvider, webLightTheme } from '@fluentui/react-components';
-import { AuthProvider } from "./contexts/authContext";
+import { AuthProvider } from './contexts/authContext';
 
-// Initialize Fluent UI icons
 initializeIcons();
 
-// Protected Route Component
 const ProtectedRoute = ({ children }) => {
   const { currentUser } = useAuth();
   
@@ -23,25 +22,28 @@ const ProtectedRoute = ({ children }) => {
   return children;
 };
 
-// Routes Component - Separate the routes logic
 const AppRoutes = () => {
   const { currentUser } = useAuth();
 
   const routesArray = [
     {
-      path: "*",
-      element: <Navigate to="/home" replace />,
+      path: '*',
+      element: <Navigate to="/splash" replace />,
     },
     {
-      path: "/login",
+      path: '/splash',
+      element: <SplashScreen />, // Show splash screen
+    },
+    {
+      path: '/login',
       element: currentUser ? <Navigate to="/home" replace /> : <Login />,
     },
     {
-      path: "/register",
+      path: '/register',
       element: currentUser ? <Navigate to="/home" replace /> : <Register />,
     },
     {
-      path: "/home",
+      path: '/home',
       element: (
         <ProtectedRoute>
           <Home />
@@ -58,7 +60,7 @@ function App() {
     <AuthProvider>
       <FluentProvider theme={webLightTheme}>
         <div className="app">
-          <Navbar />
+          {/* Don't render Navbar when on splash screen */}
           <AppRoutes />
         </div>
       </FluentProvider>

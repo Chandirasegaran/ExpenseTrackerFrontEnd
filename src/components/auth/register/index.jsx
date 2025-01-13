@@ -15,6 +15,7 @@ import {
     MessageBarBody,
     tokens,
 } from '@fluentui/react-components';
+import Navbar from '../../navBar/Navbar';
 
 import { PersonRegular, Mail20Regular, Password20Regular } from "@fluentui/react-icons";
 
@@ -26,7 +27,7 @@ const useStyles = makeStyles({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        '@media (max-width: 768px)' :{
+        '@media (max-width: 768px)': {
             marginTop: '-18%',
         }
     },
@@ -105,7 +106,7 @@ const Register = () => {
         if (!isRegistering) {
             setIsRegistering(true);
             setErrorMessage('');
-            
+
             try {
                 // Validation
                 if (password !== confirmPassword) {
@@ -117,7 +118,7 @@ const Register = () => {
 
                 // Step 1: Create Firebase user
                 const userCredential = await doCreateUserWithEmailAndPassword(email, password);
-                
+
                 // Step 2: Update Firebase profile with name
                 await updateProfile(userCredential.user, {
                     displayName: name.trim()
@@ -146,88 +147,91 @@ const Register = () => {
         return <Navigate to="/home" replace={true} />;
     }
 
-    
+
     return (
-        <div className={styles.container}>
-            <div className={styles.formContainer}>
-                <Text size={800} weight="semibold" block as="h1">
-                    Create a New Account
-                </Text>
+        <>
+            <Navbar />
+            <div className={styles.container}>
+                <div className={styles.formContainer}>
+                    <Text size={800} weight="semibold" block as="h1">
+                        Create a New Account
+                    </Text>
 
-                <form onSubmit={onSubmit} className={styles.form}>
-                    <Field label="Name" required>
-                        <Input
-                            type="text"
-                            autoComplete="name"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
+                    <form onSubmit={onSubmit} className={styles.form}>
+                        <Field label="Name" required>
+                            <Input
+                                type="text"
+                                autoComplete="name"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                disabled={isRegistering}
+                                placeholder="Enter your full name"
+                                contentBefore={<PersonRegular />}
+                            />
+                        </Field>
+
+                        <Field label="Email" required>
+                            <Input
+                                type="email"
+                                autoComplete="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                disabled={isRegistering}
+                                placeholder="Enter your email"
+                                contentBefore={<Mail20Regular />}
+                            />
+                        </Field>
+
+                        <Field label="Password" required>
+                            <Input
+                                type="password"
+                                autoComplete="new-password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                disabled={isRegistering}
+                                placeholder="Create a password"
+                                contentBefore={<Password20Regular />}
+                            />
+                        </Field>
+
+                        <Field label="Confirm Password" required>
+                            <Input
+                                type="password"
+                                autoComplete="new-password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                disabled={isRegistering}
+                                placeholder="Confirm your password"
+                                contentBefore={<Password20Regular />}
+                            />
+                        </Field>
+
+                        {errorMessage && (
+                            <MessageBar intent="error">
+                                <MessageBarBody>
+                                    {errorMessage}
+                                </MessageBarBody>
+                            </MessageBar>
+                        )}
+
+                        <Button
+                            type="submit"
+                            appearance="primary"
                             disabled={isRegistering}
-                            placeholder="Enter your full name"
-                            contentBefore={<PersonRegular />}
-                        />
-                    </Field>
+                        >
+                            {isRegistering ? <Spinner size="tiny" /> : 'Sign Up'}
+                        </Button>
+                    </form>
 
-                    <Field label="Email" required>
-                        <Input
-                            type="email"
-                            autoComplete="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            disabled={isRegistering}
-                            placeholder="Enter your email"
-                            contentBefore={<Mail20Regular />}
-                        />
-                    </Field>
-
-                    <Field label="Password" required>
-                        <Input
-                            type="password"
-                            autoComplete="new-password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            disabled={isRegistering}
-                            placeholder="Create a password"
-                            contentBefore={<Password20Regular />}
-                        />
-                    </Field>
-
-                    <Field label="Confirm Password" required>
-                        <Input
-                            type="password"
-                            autoComplete="new-password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            disabled={isRegistering}
-                            placeholder="Confirm your password"
-                            contentBefore={<Password20Regular />}
-                        />
-                    </Field>
-
-                    {errorMessage && (
-                        <MessageBar intent="error">
-                            <MessageBarBody>
-                                {errorMessage}
-                            </MessageBarBody>
-                        </MessageBar>
-                    )}
-
-                    <Button
-                        type="submit"
-                        appearance="primary"
-                        disabled={isRegistering}
-                    >
-                        {isRegistering ? <Spinner size="tiny" /> : 'Sign Up'}
-                    </Button>
-                </form>
-
-                <Text align="center" size={200}>
-                    Already have an account?{' '}
-                    <Link to="/login" className={styles.link}>
-                        Sign in
-                    </Link>
-                </Text>
+                    <Text align="center" size={200}>
+                        Already have an account?{' '}
+                        <Link to="/login" className={styles.link}>
+                            Sign in
+                        </Link>
+                    </Text>
+                </div>
             </div>
-        </div>
+        </>
     );
 };
 

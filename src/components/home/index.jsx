@@ -5,6 +5,7 @@ import { Tab, TabList, makeStyles, Text } from "@fluentui/react-components";
 import DailyView from '../../Pages/DailyView/DailyView';
 import MonthlyView from '../../Pages/MonthlyView/MonthlyView';
 import AllExpenses from '../../Pages/AllExpenses/AllExpenses';
+import Navbar from '../navBar/Navbar';
 
 const useStyles = makeStyles({
     container: {
@@ -71,6 +72,8 @@ const Home = () => {
     };
 
     return (
+        <>
+        <Navbar />
         <div className={styles.container}>
             <div className={styles.header}>
                 <Text block size={500} className={styles.welcome}>
@@ -89,6 +92,7 @@ const Home = () => {
 
             {renderView()}
         </div>
+        </>
     );
 };
 
