@@ -1,4 +1,4 @@
-import logo from '../assets/logo.png';
+import logo from '../assets/logo.webp';
 import React, { useState, useEffect } from 'react';
 import { ProgressBar, Field, makeStyles } from '@fluentui/react-components';
 import { Navigate } from 'react-router-dom';
@@ -72,7 +72,7 @@ const SplashScreen = () => {
         setTimeout(() => {
             setShowSplash(false);
             checkServerStatus();
-        }, 2500);
+        }, 1000);
 
         const interval = setInterval(checkServerStatus, 5000);
         return () => clearInterval(interval);

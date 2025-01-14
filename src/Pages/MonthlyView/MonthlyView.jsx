@@ -16,7 +16,6 @@ import {
     Option,
 } from "@fluentui/react-components";
 import { Add24Regular, Delete24Regular, CalendarRegular } from "@fluentui/react-icons";
-import { use } from 'react';
 
 const useStyles = makeStyles({
     container: {
@@ -44,41 +43,56 @@ const useStyles = makeStyles({
             textAlign: 'right',
         }
     },
-   
+    deleteButton: {
+        minWidth: 'auto',
+    },
 });
 
 const MonthlyView = () => {
     const styles = useStyles();
     const { currentUser } = useAuth();
-    const [selectedMonth, setSelectedMonth] = useState((new Date().getMonth() + 1).toString()); // 1-based months
+    const [selectedMonth, setSelectedMonth] = useState((new Date().getMonth() + 1).toString());
     const [selectedYear, setSelectedYear] = React.useState(new Date().getFullYear());
     const [expenses, setExpenses] = React.useState([]);
     const [loading, setLoading] = React.useState(true);
+
+    const months = [
+        { name: "January", value: "01" },
+        { name: "February", value: "02" },
+        { name: "March", value: "03" },
+        { name: "April", value: "04" },
+        { name: "May", value: "05" },
+        { name: "June", value: "06" },
+        { name: "July", value: "07" },
+        { name: "August", value: "08" },
+        { name: "September", value: "09" },
+        { name: "October", value: "10" },
+        { name: "November", value: "11" },
+        { name: "December", value: "12" },
+    ];
 
     const fetchExpenses = async () => {
         setLoading(true);
         try {
             const response = await fetch(`https://expensetrackerbackend-uptz.onrender.com/api/expense/getExpensesByMonthAndEmail/${selectedMonth}/${selectedYear}/${currentUser.email}`);
-            if (response.status == 404) {
+            if (response.status === 404) {
                 setExpenses([]);
-                setLoading(false);
-                return;
+                
             } else {
                 const data = await response.json();
                 setExpenses(data);
-                setLoading(false);
             }
         } catch (e) {
             console.log(e);
         } finally {
             setLoading(false);
         }
-
-
     };
+
     const getTotalExpense = () => {
         return expenses.reduce((total, expense) => total + expense.amount, 0).toFixed(2);
     };
+
     const generateYearOptions = () => {
         const currentYear = new Date().getFullYear();
         const years = [];
@@ -87,48 +101,39 @@ const MonthlyView = () => {
         }
         return years;
     };
-  useEffect(() => {
-    fetchExpenses();
-  }, [selectedMonth, selectedYear]);
+
+    const deleteExpense = async (id) => {
+        setLoading(true);
+        try {
+            const response = await fetch(
+                `https://expensetrackerbackend-uptz.onrender.com/api/expense/deleteExpense/${id}`,
+                { method: 'DELETE' }
+            );
+            if (response.ok) {
+                fetchExpenses();
+            }
+        } catch (error) {
+            console.error('Error deleting expense:', error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchExpenses();
+    }, [selectedMonth, selectedYear]);
+
     return (
         <div className={styles.container}>
             <div className={styles.dateContainer}>
                 <Field label="Month">
                     <Dropdown
-                    
-                        selectedOptions={[selectedMonth]} // Store the numeric value (e.g., '01')
-                        placeholder={
-                            [
-                              { name: "January", value: "01" },
-                              { name: "February", value: "02" },
-                              { name: "March", value: "03" },
-                              { name: "April", value: "04" },
-                              { name: "May", value: "05" },
-                              { name: "June", value: "06" },
-                              { name: "July", value: "07" },
-                              { name: "August", value: "08" },
-                              { name: "September", value: "09" },
-                              { name: "October", value: "10" },
-                              { name: "November", value: "11" },
-                              { name: "December", value: "12" },
-                            ].find((month) => month.value === selectedMonth)?.name || "Select a month"
-                          }                        onOptionSelect={(_, data) => setSelectedMonth(data.optionValue)} // Store month as number
+                        selectedOptions={[selectedMonth]}
+                        placeholder={months.find((month) => month.value === selectedMonth)?.name || "Select a month"}
+                        onOptionSelect={(_, data) => setSelectedMonth(data.optionValue)}
                     >
-                        {[
-                            { name: "January", value: "01" },
-                            { name: "February", value: "02" },
-                            { name: "March", value: "03" },
-                            { name: "April", value: "04" },
-                            { name: "May", value: "05" },
-                            { name: "June", value: "06" },
-                            { name: "July", value: "07" },
-                            { name: "August", value: "08" },
-                            { name: "September", value: "09" },
-                            { name: "October", value: "10" },
-                            { name: "November", value: "11" },
-                            { name: "December", value: "12" },
-                        ].map((month) => (
-                            <Option key={month.value} value={month.value}>
+                        {months.map((month) => (
+                            <Option key={`month-${month.value}`} value={month.value}>
                                 {month.name}
                             </Option>
                         ))}
@@ -137,12 +142,12 @@ const MonthlyView = () => {
 
                 <Field label="Year">
                     <Dropdown
-                        selectedOptions={[selectedYear]} // Store year as a string
-                        placeholder={selectedYear? selectedYear : 'Select a year'}
-                        onOptionSelect={(_, data) => setSelectedYear(data.optionValue)} // Update state with selected year
+                        selectedOptions={[selectedYear]}
+                        placeholder={selectedYear ? selectedYear.toString() : 'Select a year'}
+                        onOptionSelect={(_, data) => setSelectedYear(data.optionValue)}
                     >
                         {generateYearOptions().map((year) => (
-                            <Option key={year} value={year.toString()}>
+                            <Option key={`year-${year}`} value={year}>
                                 {year}
                             </Option>
                         ))}
@@ -168,14 +173,22 @@ const MonthlyView = () => {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {expenses.map((expense) => (
-                                    <TableRow key={expense._id}>
-                                        <TableCell>{expenses.indexOf(expense) + 1}</TableCell>
+                                {expenses.map((expense, index) => (
+                                    <TableRow key={expense._id || `expense-${index}`}>
+                                        <TableCell>{index + 1}</TableCell>
                                         <TableCell>{expense.date}</TableCell>
                                         <TableCell>{expense.itemName}</TableCell>
                                         <TableCell>{expense.amount}</TableCell>
                                         <TableCell>
-                                            <Button className={styles.deleteButton} icon={<Delete24Regular />} />
+                                            <Button
+                                                appearance="subtle"
+                                                onClick={() => deleteExpense(expense.id)}
+                                                disabled={loading}
+                                                className={styles.deleteButton}
+                                                icon={<Delete24Regular />}
+                                            >
+                                                Delete
+                                            </Button>
                                         </TableCell>
                                     </TableRow>
                                 ))}
@@ -185,7 +198,7 @@ const MonthlyView = () => {
                     </>
                 )}
             </div>
-        </  div>
+        </div>
     );
 };
 
