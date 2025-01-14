@@ -18,6 +18,8 @@ import {
 } from "@fluentui/react-components";
 
 import { AccessTime20Filled, ArrowSyncRegular } from "@fluentui/react-icons";
+import { config, logger } from '../../config/env';
+
 
 const parseDateFromBackend = (dateString) => {
     // Split the dd-MM-yyyy format and rearrange to yyyy-MM-dd for Date parsing
@@ -49,7 +51,7 @@ const AllExpenses = () => {
         setLoading(true); // Set loading state to true when fetching starts
         try {
             const response = await fetch(
-                `https://expensetrackerbackend-uptz.onrender.com/api/expense/getExpensesByEmail/${currentUser.email}`
+                `${config.apiUrl}/api/expense/getExpensesByEmail/${currentUser.email}`
             );
             const data = await response.json();
             // Correct the date format for all expenses
@@ -60,7 +62,7 @@ const AllExpenses = () => {
             setExpenses(correctedData);
             groupExpensesByYearAndMonth(correctedData);
         } catch (e) {
-            console.error("Error fetching expenses:", e);
+            logger.error("Error fetching expenses:", e);
         } finally {
             setLoading(false); // Set loading state to false once the fetch is complete
         }

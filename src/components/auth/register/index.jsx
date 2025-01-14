@@ -18,6 +18,7 @@ import {
 import Navbar from '../../navBar/Navbar';
 
 import { PersonRegular, Mail20Regular, Password20Regular } from "@fluentui/react-icons";
+import { config, logger } from '../../../config/env';
 
 
 const useStyles = makeStyles({
@@ -83,7 +84,7 @@ const Register = () => {
 
     const addUserToBackend = async (userData) => {
         try {
-            const response = await fetch('https://expensetrackerbackend-uptz.onrender.com/api/user/addUser', {
+            const response = await fetch('${config.apiUrl}/api/user/addUser', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

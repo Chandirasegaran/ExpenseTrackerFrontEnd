@@ -16,6 +16,7 @@ import {
     Option,
 } from "@fluentui/react-components";
 import { Add24Regular, Delete24Regular, CalendarRegular } from "@fluentui/react-icons";
+import { config, logger } from '../../config/env';
 
 const useStyles = makeStyles({
     container: {
@@ -74,7 +75,7 @@ const MonthlyView = () => {
     const fetchExpenses = async () => {
         setLoading(true);
         try {
-            const response = await fetch(`https://expensetrackerbackend-uptz.onrender.com/api/expense/getExpensesByMonthAndEmail/${selectedMonth}/${selectedYear}/${currentUser.email}`);
+            const response = await fetch(`${config.apiUrl}/api/expense/getExpensesByMonthAndEmail/${selectedMonth}/${selectedYear}/${currentUser.email}`);
             if (response.status === 404) {
                 setExpenses([]);
                 
@@ -83,7 +84,7 @@ const MonthlyView = () => {
                 setExpenses(data);
             }
         } catch (e) {
-            console.log(e);
+            logger.log(e);
         } finally {
             setLoading(false);
         }
@@ -106,14 +107,14 @@ const MonthlyView = () => {
         setLoading(true);
         try {
             const response = await fetch(
-                `https://expensetrackerbackend-uptz.onrender.com/api/expense/deleteExpense/${id}`,
+                `${config.apiUrl}/api/expense/deleteExpense/${id}`,
                 { method: 'DELETE' }
             );
             if (response.ok) {
                 fetchExpenses();
             }
         } catch (error) {
-            console.error('Error deleting expense:', error);
+            logger.error('Error deleting expense:', error);
         } finally {
             setLoading(false);
         }

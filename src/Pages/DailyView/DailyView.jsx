@@ -16,6 +16,7 @@ import {
 } from "@fluentui/react-components";
 
 import { Add24Regular, Delete24Regular , AppsListRegular} from "@fluentui/react-icons";
+import { config, logger } from '../../config/env';
 
 
 const useStyles = makeStyles({
@@ -90,7 +91,7 @@ const DailyView = () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `https://expensetrackerbackend-uptz.onrender.com/api/expense/getExpensesByDateAndEmail/${selectedDate}/${currentUser.email}`
+        `${config.apiUrl}/api/expense/getExpensesByDateAndEmail/${selectedDate}/${currentUser.email}`
       );
       // If the response is plain text (No Expense Found)
       if (response.status === 404) {
@@ -100,7 +101,7 @@ const DailyView = () => {
         setExpenses(Array.isArray(data) ? data : []);
       }
     } catch (error) {
-      console.error('Error fetching expenses:', error);
+      logger.error('Error fetching expenses:', error);
     } finally {
       setIsLoading(false);
     }
@@ -115,7 +116,7 @@ const DailyView = () => {
       const formattedDate = new Date(selectedDate)
         .toLocaleDateString('en-GB')  // 'en-GB' locale provides dd-MM-yyyy format
         .split('/').join('-'); // Converts the date to dd-MM-yyyy format
-      const response = await fetch('https://expensetrackerbackend-uptz.onrender.com/api/expense/addExpense', {
+      const response = await fetch('${config.apiUrl}/api/expense/addExpense', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -133,7 +134,7 @@ const DailyView = () => {
         fetchExpenses();
       }
     } catch (error) {
-      console.error('Error adding expense:', error);
+      logger.error('Error adding expense:', error);
     } finally {
       setIsLoading(false);
     }
@@ -143,14 +144,14 @@ const DailyView = () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `https://expensetrackerbackend-uptz.onrender.com/api/expense/deleteExpense/${id}`,
+        `${config.apiUrl}/api/expense/deleteExpense/${id}`,
         { method: 'DELETE' }
       );
       if (response.ok) {
         fetchExpenses();
       }
     } catch (error) {
-      console.error('Error deleting expense:', error);
+      logger.error('Error deleting expense:', error);
     } finally {
       setIsLoading(false);
     }

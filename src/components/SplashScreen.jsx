@@ -2,6 +2,7 @@ import logo from '../assets/logo.webp';
 import React, { useState, useEffect } from 'react';
 import { ProgressBar, Field, makeStyles } from '@fluentui/react-components';
 import { Navigate } from 'react-router-dom';
+import { config, logger } from '../config/env';
 
 const useStyles = makeStyles({
     splashScreen: {
@@ -59,12 +60,12 @@ const SplashScreen = () => {
 
     const checkServerStatus = async () => {
         try {
-            const response = await fetch('https://expensetrackerbackend-uptz.onrender.com/api/expense/');
+            const response = await fetch('${config.apiUrl}/api/expense/');
             if (response.status === 200) {
                 setIsServerUp(true);
             }
         } catch (error) {
-            console.error('Error checking server status:', error);
+            logger.error('Error checking server status:', error);
         }
     };
 
