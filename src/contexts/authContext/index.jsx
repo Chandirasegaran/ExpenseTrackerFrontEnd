@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
 import { auth } from "../../firebase/firebase";
 import { onAuthStateChanged } from "firebase/auth";
+import { syncUserWithBackend } from "../../utils/authUtils"; // Add this import
+import { logger } from "../../config/env"; // Add this import
 
 const AuthContext = React.createContext();
 
@@ -22,6 +24,12 @@ export function AuthProvider({ children }) {
         if (user) {
             setCurrentUser(user);
             setUserLoggedIn(true);
+            try {
+                await syncUserWithBackend(user);
+            } catch (error) {
+                logger.error('Error syncing user:', error);
+                // Consider how you want to handle sync failures
+            }
 
         } else {
             setCurrentUser(null);

@@ -60,7 +60,7 @@ const SplashScreen = () => {
 
     const checkServerStatus = async () => {
         try {
-            const response = await fetch('${config.apiUrl}/api/expense/');
+            const response = await fetch(`${config.apiUrl}/api/expense/`);
             if (response.status === 200) {
                 setIsServerUp(true);
             }

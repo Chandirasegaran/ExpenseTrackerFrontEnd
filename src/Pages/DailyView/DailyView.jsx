@@ -116,7 +116,7 @@ const DailyView = () => {
       const formattedDate = new Date(selectedDate)
         .toLocaleDateString('en-GB')  // 'en-GB' locale provides dd-MM-yyyy format
         .split('/').join('-'); // Converts the date to dd-MM-yyyy format
-      const response = await fetch('${config.apiUrl}/api/expense/addExpense', {
+      const response = await fetch(`${config.apiUrl}/api/expense/addExpense`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

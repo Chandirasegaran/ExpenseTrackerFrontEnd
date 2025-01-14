@@ -1,6 +1,6 @@
 export const config = {
     isProduction: import.meta.env.PROD,
-    apiUrl: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+    apiUrl: import.meta.env.VITE_API_URL || 'http://localhost:5173',
 };
 
 // Optional: Create a logger utility

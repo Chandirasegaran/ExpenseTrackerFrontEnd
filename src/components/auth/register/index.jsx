@@ -84,7 +84,7 @@ const Register = () => {
 
     const addUserToBackend = async (userData) => {
         try {
-            const response = await fetch('${config.apiUrl}/api/user/addUser', {
+            const response = await fetch(`${config.apiUrl}/api/user/addUser`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
