@@ -31,10 +31,68 @@
     <!-- Canonical URL -->
     <link rel="canonical" href="https://expensetracker-segar.vercel.app/" />
 
+    <style>
+      body {
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+      }
+    </style>
+
+
     <title>Expenses Tracker</title>
   </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      // Disable right-click
+      document.addEventListener('contextmenu', (e) => e.preventDefault());
+
+      // Disable keyboard shortcuts
+      document.addEventListener('keydown', function(e) {
+        // Disable F12
+        if(e.key === 'F12') {
+          e.preventDefault();
+          return false;
+        }
+        
+        // Disable Ctrl+Shift+I / Cmd+Option+I
+        if((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'I') {
+          e.preventDefault();
+          return false;
+        }
+        
+        // Disable Ctrl+Shift+J / Cmd+Option+J
+        if((e.ctrlKey || e.metaKey) && e.shiftKey && e.key === 'J') {
+          e.preventDefault();
+          return false;
+        }
+
+        // Disable Ctrl+U / Cmd+U (view source)
+        if((e.ctrlKey || e.metaKey) && e.key === 'u') {
+          e.preventDefault();
+          return false;
+        }
+      });
+
+      // Detect and disable DevTools
+      function detectDevTools() {
+        const widthThreshold = window.outerWidth - window.innerWidth > 160;
+        const heightThreshold = window.outerHeight - window.innerHeight > 160;
+        
+        if(widthThreshold || heightThreshold) {
+          document.body.innerHTML = 'DevTools detected! Please close developer tools to continue.';
+        }
+      }
+
+      setInterval(detectDevTools, 1000);
+
+      // Clear console
+      setInterval(() => {
+        console.clear();
+      }, 1000);
+    </script>
   </body>
 </html>
